@@ -1,0 +1,41 @@
+{
+    // Force docker-compose files to use the plain "yaml" language so the
+    // Red Hat YAML extension fully owns them (highlighting, formatting,
+    // validation, autocomplete). This avoids the known conflict where both
+    // Docker DX's compose language server AND Red Hat YAML handle these files.
+    "files.associations": {
+        "**/docker-compose*.yml": "yaml",
+        "**/docker-compose*.yaml": "yaml",
+        "**/compose*.yml": "yaml",
+        "**/compose*.yaml": "yaml"
+    },
+    "[yaml]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "editor.autoIndent": "advanced",
+        "editor.quickSuggestions": {
+            "comments": false,
+            "other": true,
+            "strings": true
+        },
+        "editor.defaultFormatter": "redhat.vscode-yaml",
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true
+    },
+    "yaml.format.enable": true,
+    "yaml.format.singleQuote": false,
+    "yaml.format.bracketSpacing": true,
+    "yaml.format.proseWrap": "preserve",
+    "yaml.format.printWidth": 80,
+    "yaml.yamlVersion": "1.2",
+    "yaml.schemaStore.enable": true,
+    // Validate against the official docker-compose spec schema.
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json": [
+            "docker-compose*.yml",
+            "docker-compose*.yaml",
+            "compose*.yml",
+            "compose*.yaml"
+        ]
+    }
+}
