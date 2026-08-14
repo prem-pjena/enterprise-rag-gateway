@@ -30,6 +30,7 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/rag_gateway
       REDIS_URL: redis://redis:6379
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
     depends_on:
       postgres:
         condition: service_healthy
