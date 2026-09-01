@@ -1,36 +1,53 @@
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.output_parsers import StrOutputParser
+from collections.abc import AsyncIterator
 
-from core.config import settings
+from pydantic import BaseModel
+from pydantic_ai import Agent
 
 
-prompt = ChatPromptTemplate.from_template(
-    "Answer the question using the provided context.\n\n"
-    "Context:\n{context}\n\n"
-    "Question:\n{question}"
+class AnswerResponse(BaseModel):
+    answer: str
+
+
+agent = Agent(
+    "google:gemini-3.6-flash",
+    output_type=AnswerResponse,
 )
 
 
-llm = ChatGoogleGenerativeAI(
-    model="gemini-3.6-flash",
-    google_api_key=settings.GOOGLE_API_KEY,
-)
-
-
-output_parser = StrOutputParser()
-
-
-chain = prompt | llm | output_parser
+def build_prompt(
+    context: str,
+    question: str,
+) -> str:
+    return (
+        "Answer the question using the provided context.\n\n"
+        f"Context:\n{context}\n\n"
+        f"Question:\n{question}"
+    )
 
 
 async def generate_answer(
     context: str,
     question: str,
 ) -> str:
-    return await chain.ainvoke(
-        {
-            "context": context,
-            "question": question,
-        }
+    prompt = build_prompt(
+        context=context,
+        question=question,
     )
+
+    result = await agent.run(prompt)
+
+    return result.output.answer
+
+
+async def stream_answer(
+    context: str,
+    question: str,
+) -> AsyncIterator[str]:
+    prompt = build_prompt(
+        context=context,
+        question=question,
+    )
+
+    async with agent.run_stream(prompt) as result:
+        async for output in result.stream_output():
+            yield output.answer

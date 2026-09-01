@@ -1,42 +1,66 @@
 services:
   postgres:
     image: pgvector/pgvector:pg16
+
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
     environment:
       POSTGRES_DB: rag_gateway
+
       POSTGRES_USER: postgres
+
       POSTGRES_PASSWORD: postgres
+
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d rag_gateway"]
+
       interval: 5s
+
       timeout: 5s
+
       retries: 5
 
   redis:
     image: redis:7
+
     volumes:
       - redis_data:/data
+
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
+
       interval: 5s
+
       timeout: 5s
+
       retries: 5
 
   app:
     build: .
+
     ports:
       - "8000:8000"
+
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/rag_gateway
+      DATABASE_URL: postgresql://rag_app:rag_app_password@postgres:5432/rag_gateway
+
       REDIS_URL: redis://redis:6379
+
       GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+
+      LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY}
+
+      LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY}
+
     depends_on:
       postgres:
         condition: service_healthy
+
       redis:
         condition: service_healthy
 
 volumes:
   postgres_data:
+
   redis_data:
