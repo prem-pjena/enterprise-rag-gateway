@@ -142,3 +142,4 @@ langfuse
 langchain-experimental==0.4.2
 litellm==1.99.0
 APScheduler==3.11.3
+nemoguardrails==0.24.0

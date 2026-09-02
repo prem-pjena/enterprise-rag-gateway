@@ -1,0 +1,9 @@
+define bot refuse other tenant data
+  "I'm sorry, I can't help with access to another tenant's data."
+
+define flow check other tenant data
+  $result = execute check_other_tenant_data
+
+  if $result.is_blocked
+    bot refuse other tenant data
+    stop

@@ -10,6 +10,7 @@ from redis.asyncio import Redis
 from core.config import settings
 from providers.db import get_db_pool, hybrid_search
 from services.embeddings import embed_query
+from services.guardrails import check_input
 from services.llm import stream_answer
 from services.reranker import rerank_documents
 from services.rate_limiter import rate_limit
@@ -53,6 +54,28 @@ async def search(
         request=request,
         tenant_id=str(tenant_id),
     )
+
+    guardrail_response = await check_input(
+        search_request.query,
+    )
+
+    if guardrail_response is not None:
+
+        async def refusal_event_stream():
+            yield f"data: {guardrail_response}\n\n"
+            yield "data: [DONE]\n\n"
+
+        return StreamingResponse(
+            refusal_event_stream(),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+                "X-Accel-Buffering": "no",
+                "X-Guardrail": "BLOCKED",
+                "X-Cache": "BYPASS",
+            },
+        )
 
     redis: Redis = request.app.state.redis
 
