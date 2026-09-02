@@ -46,7 +46,7 @@ httpx2==2.12.0
 huggingface_hub==1.28.0
 humanfriendly==10.0
 idna==3.18
-importlib_metadata==9.0.0
+importlib_metadata==8.7.0
 jaraco.classes==3.4.0
 jaraco.context==6.1.2
 jaraco.functools==4.6.0
@@ -141,3 +141,4 @@ zstandard==0.25.0
 langfuse
 langchain-experimental==0.4.2
 litellm==1.99.0
+APScheduler==3.11.3

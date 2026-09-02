@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     LANGFUSE_PUBLIC_KEY: str
     LANGFUSE_SECRET_KEY: str
     LANGFUSE_BASE_URL: str = "https://cloud.langfuse.com"
+    LITELLM_BASE_URL: str = "http://litellm:4000"
+    LITELLM_MASTER_KEY: str
 
     RATE_LIMIT_CAPACITY: int = 10
     RATE_LIMIT_REFILL_RATE: float = 2.0

@@ -1,0 +1,15 @@
+model_list:
+  - model_name: gemini-primary
+    litellm_params:
+      model: gemini/gemini-3.6-flash
+      api_key: os.environ/GOOGLE_API_KEY
+
+  - model_name: gemini-fallback
+    litellm_params:
+      model: gemini/gemini-3.5-flash
+      api_key: os.environ/GOOGLE_API_KEY
+
+litellm_settings:
+  fallbacks:
+    - gemini-primary: ["gemini-fallback"]
+  master_key: os.environ/LITELLM_MASTER_KEY
