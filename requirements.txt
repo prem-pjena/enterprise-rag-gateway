@@ -140,3 +140,4 @@ zstandard==0.25.0
 
 langfuse
 langchain-experimental==0.4.2
+litellm==1.99.0
