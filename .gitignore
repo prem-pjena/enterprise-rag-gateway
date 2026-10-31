@@ -6,7 +6,6 @@ venv/
 .env
 node_modules/
 dist/
-.env.example
 .vscode
 .gitignore
 .dockerignore
